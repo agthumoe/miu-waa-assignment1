@@ -23,9 +23,9 @@ public class PostController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<PostDto> getAllPosts(@RequestParam(value = "author", required = false) String author, @RequestParam(value = "author:containing", required = false) String authorContaining) {
-        if (author != null && authorContaining == null) {
+        if (author != null) {
             return postService.findByAuthor(author);
-        } else if (author == null && authorContaining != null) {
+        } else if (authorContaining != null) {
             return postService.findByAuthorContaining(authorContaining);
         }
         return postService.findAll();
@@ -50,7 +50,7 @@ public class PostController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PostDto updatePost(@PathVariable long id, @RequestBody PostDto post) {
+    public PostDto updatePost(@PathVariable long id, @RequestBody PostCreateDto post) {
         return this.postService.update(id, post);
     }
 }

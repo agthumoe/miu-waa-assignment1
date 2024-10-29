@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto update(long id, PostDto post) {
+    public PostDto update(long id, PostCreateDto post) {
         return this.postMapper.map(this.postRepository.update(id, this.postMapper.map(post, Post.class)), PostDto.class);
     }
 }

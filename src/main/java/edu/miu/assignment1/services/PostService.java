@@ -12,5 +12,5 @@ public interface PostService {
     PostDto findById(long id);
     PostDto save(PostCreateDto post);
     void delete(long id);
-    PostDto update(long id, PostDto post);
+    PostDto update(long id, PostCreateDto post);
 }
