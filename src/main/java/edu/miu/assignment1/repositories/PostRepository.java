@@ -1,22 +1,14 @@
 package edu.miu.assignment1.repositories;
 
 import edu.miu.assignment1.models.Post;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PostRepository {
-    List<Post> findAll();
-
+@Repository
+public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByAuthor(String author);
-
     List<Post> findByAuthorContaining(String author);
-
-    Optional<Post> findById(long id);
-
-    Post save(Post post);
-
-    void delete(long id);
-
-    Post update(long id, Post post);
 }

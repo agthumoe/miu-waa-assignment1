@@ -6,17 +6,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "posts")
-public class Post {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String title;
-    private String content;
-    private String author;
+
+    private String name;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Post> posts = new ArrayList<>();
 }

@@ -1,7 +1,7 @@
 package edu.miu.assignment1.controllers;
 
-import edu.miu.assignment1.models.PostCreateDto;
-import edu.miu.assignment1.models.PostDto;
+import edu.miu.assignment1.models.dtos.PostCreateDto;
+import edu.miu.assignment1.models.dtos.PostDto;
 import edu.miu.assignment1.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

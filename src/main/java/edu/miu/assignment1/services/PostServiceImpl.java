@@ -1,8 +1,8 @@
 package edu.miu.assignment1.services;
 
 import edu.miu.assignment1.models.Post;
-import edu.miu.assignment1.models.PostCreateDto;
-import edu.miu.assignment1.models.PostDto;
+import edu.miu.assignment1.models.dtos.PostCreateDto;
+import edu.miu.assignment1.models.dtos.PostDto;
 import edu.miu.assignment1.repositories.PostRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +52,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void delete(long id) {
-        this.postRepository.delete(id);
+        this.postRepository.deleteById(id);
     }
 
     @Override
     public PostDto update(long id, PostCreateDto post) {
-        return this.postMapper.map(this.postRepository.update(id, this.postMapper.map(post, Post.class)), PostDto.class);
+        Post existingPost = this.postRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found"));
+        existingPost.setTitle(post.getTitle());
+        existingPost.setContent(post.getContent());
+        existingPost.setAuthor(post.getAuthor());
+        this.postRepository.save(existingPost);
+        return this.postMapper.map(existingPost, PostDto.class);
     }
 }

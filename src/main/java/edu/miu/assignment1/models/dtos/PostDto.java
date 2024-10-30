@@ -1,4 +1,4 @@
-package edu.miu.assignment1.models;
+package edu.miu.assignment1.models.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
