@@ -1,8 +1,6 @@
 package edu.miu.assignment1.services;
 
-import edu.miu.assignment1.models.dtos.PostDto;
-import edu.miu.assignment1.models.dtos.UserCreateDto;
-import edu.miu.assignment1.models.dtos.UserDto;
+import edu.miu.assignment1.models.dtos.*;
 
 import java.util.List;
 
@@ -14,4 +12,5 @@ public interface UserService {
     UserDto update(long id, UserCreateDto post);
     List<PostDto> findAllPostsByUserId(long id);
     List<UserDto> findAllUsersHavingPostGreaterThan(int size);
+    CommentDto getCommentsByUserIdAndPostId(long userId, long postId, long commentId);
 }

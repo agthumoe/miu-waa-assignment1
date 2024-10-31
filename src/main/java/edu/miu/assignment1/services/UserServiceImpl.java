@@ -1,10 +1,11 @@
 package edu.miu.assignment1.services;
 
 import edu.miu.assignment1.helpers.ListMapper;
+import edu.miu.assignment1.models.Comment;
+import edu.miu.assignment1.models.Post;
 import edu.miu.assignment1.models.User;
-import edu.miu.assignment1.models.dtos.PostDto;
-import edu.miu.assignment1.models.dtos.UserCreateDto;
-import edu.miu.assignment1.models.dtos.UserDto;
+import edu.miu.assignment1.models.dtos.*;
+import edu.miu.assignment1.repositories.CommentRepository;
 import edu.miu.assignment1.repositories.PostRepository;
 import edu.miu.assignment1.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -17,13 +18,15 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final ModelMapper mapper;
     private final ListMapper listMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository, ModelMapper mapper, ListMapper listMapper) {
+    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository, ModelMapper mapper, ListMapper listMapper) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
         this.mapper = mapper;
         this.listMapper = listMapper;
     }
@@ -65,4 +68,13 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> findAllUsersHavingPostGreaterThan(int size) {
         return this.listMapper.mapList(this.userRepository.findAllUsersHavingPostGreaterThan(size), UserDto.class);
     }
+
+    @Override
+    public CommentDto getCommentsByUserIdAndPostId(long userId, long postId, long commentId) {
+        this.userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Not found"));
+        this.postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Not found"));
+        return this.mapper.map(this.commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Not found")), CommentDto.class);
+    }
+
+
 }

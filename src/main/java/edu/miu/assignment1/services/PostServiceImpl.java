@@ -9,6 +9,7 @@ import edu.miu.assignment1.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,12 +51,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public PostDto save(PostCreateDto dto) {
         User user = this.userRepository.findById(dto.getUserId()).orElseThrow(() -> new RuntimeException("Not Found"));
-        Post post = this.postRepository.save(this.postMapper.map(dto, Post.class));
-        user.getPosts().add(post);
-        this.userRepository.save(user);
-        return this.postMapper.map(post, PostDto.class);
+        user.getPosts().add(this.postMapper.map(dto, Post.class));
+        return this.postMapper.map(dto, PostDto.class);
     }
 
     @Override
