@@ -1,18 +1,14 @@
 package edu.miu.assignment1.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,7 +18,8 @@ public class User {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "user_id")
     private List<Post> posts = new ArrayList<>();
 }

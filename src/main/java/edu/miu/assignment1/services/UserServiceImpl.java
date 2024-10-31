@@ -57,7 +57,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<PostDto> findAllPostsByUserId(long id) {
-        return this.listMapper.mapList(this.postRepository.findByUserId(id), PostDto.class);
+        User user = this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+        return this.listMapper.mapList(user.getPosts(), PostDto.class);
     }
 
     @Override
