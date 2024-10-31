@@ -169,7 +169,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/users",
+							"raw": "localhost:8080/api/v1/users?posts:gt=3",
 							"host": [
 								"localhost"
 							],
@@ -178,6 +178,12 @@
 								"api",
 								"v1",
 								"users"
+							],
+							"query": [
+								{
+									"key": "posts:gt",
+									"value": "3"
+								}
 							]
 						}
 					},
@@ -296,6 +302,34 @@
 								{
 									"key": "id",
 									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Posts By User ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/users/:userId/posts",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":userId",
+								"posts"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "1"
 								}
 							]
 						}

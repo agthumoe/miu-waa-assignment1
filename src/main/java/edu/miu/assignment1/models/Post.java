@@ -19,4 +19,6 @@ public class Post {
     private String title;
     private String content;
     private String author;
+    @Column(name = "user_id")
+    private Long userId;
 }

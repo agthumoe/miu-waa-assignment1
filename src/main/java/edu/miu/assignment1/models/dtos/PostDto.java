@@ -9,6 +9,9 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDto extends PostCreateDto {
+public class PostDto {
     private long id;
+    private String title;
+    private String content;
+    private String author;
 }

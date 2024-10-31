@@ -1,5 +1,6 @@
 package edu.miu.assignment1.services;
 
+import edu.miu.assignment1.models.dtos.PostDto;
 import edu.miu.assignment1.models.dtos.UserCreateDto;
 import edu.miu.assignment1.models.dtos.UserDto;
 
@@ -11,4 +12,6 @@ public interface UserService {
     UserDto save(UserCreateDto post);
     void delete(long id);
     UserDto update(long id, UserCreateDto post);
+    List<PostDto> findAllPostsByUserId(long id);
+    List<UserDto> findAllUsersHavingPostGreaterThan(int size);
 }
