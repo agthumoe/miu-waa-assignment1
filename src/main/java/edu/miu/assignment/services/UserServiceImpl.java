@@ -8,6 +8,7 @@ import edu.miu.assignment.models.dtos.UserCreateDto;
 import edu.miu.assignment.models.dtos.UserDto;
 import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.CommentRepository;
+import edu.miu.assignment.repositories.PostRepository;
 import edu.miu.assignment.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,14 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final CustomMapper mapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CommentRepository commentRepository, CustomMapper mapper) {
+    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository, CustomMapper mapper) {
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.mapper = mapper;
     }
@@ -71,4 +74,18 @@ public class UserServiceImpl implements UserService {
         return this.mapper.map(this.commentRepository.findByUserIdPostIdAndCommentId(userId, postId, commentId).orElseThrow(() -> new HttpStatusException("Not Found", HttpStatus.NOT_FOUND)), CommentDto.class);
     }
 
+    @Override
+    public List<UserDto> findAllUsersThatMadePostsWithinGivenTitle(String title) {
+        return this.mapper.map(this.userRepository.findAllUsersThatMadePostsWithinGivenTitle(title), UserDto.class);
+    }
+
+    @Override
+    public PostDto findByUserIdAndPostId(long userId, long postId) {
+        return this.mapper.map(this.postRepository.findByUserIdAndPostId(userId, postId).orElseThrow(() -> new HttpStatusException("Not Found", HttpStatus.NOT_FOUND)), PostDto.class);
+    }
+
+    @Override
+    public List<CommentDto> findAllCommentsByUserIdAndPostId(long userId, long postId) {
+        return this.mapper.map(this.commentRepository.findAllCommentsByUserIdAndPostId(userId, postId), CommentDto.class);
+    }
 }

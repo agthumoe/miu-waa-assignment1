@@ -1,5 +1,6 @@
 package edu.miu.assignment.controllers;
 
+import edu.miu.assignment.models.dtos.CommentCreateDto;
 import edu.miu.assignment.models.dtos.CommentDto;
 import edu.miu.assignment.models.dtos.PostCreateDto;
 import edu.miu.assignment.models.dtos.PostDto;
@@ -24,21 +25,21 @@ public class PostController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<PostDto> getAllPosts(
             @RequestParam(value = "author", required = false) String author,
             @RequestParam(value = "author:containing", required = false) String authorContaining,
             @RequestParam(value = "title", required = false) String title) {
-        if (author != null) {
+        if (author != null && !author.isEmpty()) {
             return postService.findByAuthor(author);
-        } else if (authorContaining != null) {
+        } else if (authorContaining != null && !authorContaining.isEmpty()) {
             return postService.findByAuthorContaining(authorContaining);
+        } else if (title != null && !title.isEmpty()) {
+            return postService.findByTitle(title);
         }
         return postService.findAll();
     }
 
     @GetMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
     public PostDto getPostById(@PathVariable long id) {
          return this.postService.findById(id);
     }
@@ -50,19 +51,17 @@ public class PostController {
     }
 
     @PutMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
     public PostDto updatePost(@PathVariable long id, @RequestBody PostCreateDto post) {
         return this.postService.update(id, post);
     }
 
     @PostMapping("{postId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto createPost(@PathVariable long postId, @RequestBody CommentDto dto) {
+    public CommentDto createPost(@PathVariable long postId, @RequestBody CommentCreateDto dto) {
         return this.commentService.save(postId, dto);
     }
 
     @GetMapping("{postId}/comments")
-    @ResponseStatus(HttpStatus.OK)
     public List<CommentDto> getPostComments(@PathVariable long postId) {
         return this.commentService.findByPostId(postId);
     }

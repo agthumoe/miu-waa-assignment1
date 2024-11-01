@@ -16,4 +16,7 @@ public interface UserService {
     List<PostDto> findAllPostsByUserId(long id);
     List<UserDto> findAllUsersHavingPostGreaterThan(int size);
     CommentDto getCommentsByUserIdAndPostId(long userId, long postId, long commentId);
+    List<CommentDto> findAllCommentsByUserIdAndPostId(long userId, long postId);
+    List<UserDto> findAllUsersThatMadePostsWithinGivenTitle(String title);
+    PostDto findByUserIdAndPostId(long userId, long postId);
 }

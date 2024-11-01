@@ -71,12 +71,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public PostDto update(long id, PostCreateDto post) {
         Post existingPost = this.postRepository.findById(id).orElseThrow(() -> new HttpStatusException("Post not found", HttpStatus.NOT_FOUND));
         existingPost.setTitle(post.getTitle());
         existingPost.setContent(post.getContent());
         existingPost.setAuthor(post.getAuthor());
-        this.postRepository.save(existingPost);
         return this.mapper.map(existingPost, PostDto.class);
     }
 }
