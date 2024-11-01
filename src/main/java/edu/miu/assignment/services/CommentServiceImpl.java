@@ -4,10 +4,9 @@ import edu.miu.assignment.exceptions.HttpStatusException;
 import edu.miu.assignment.models.Comment;
 import edu.miu.assignment.models.Post;
 import edu.miu.assignment.models.dtos.CommentDto;
+import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.CommentRepository;
 import edu.miu.assignment.repositories.PostRepository;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,11 +17,11 @@ import java.util.List;
 @Service
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
-    private final ModelMapper mapper;
+    private final CustomMapper mapper;
     private final PostRepository postRepository;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, ModelMapper mapper, PostRepository postRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, CustomMapper mapper, PostRepository postRepository) {
         this.commentRepository = commentRepository;
         this.mapper = mapper;
         this.postRepository = postRepository;
@@ -31,12 +30,12 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> findByPostId(long postId) {
         Post post = this.postRepository.findById(postId).orElseThrow(() -> new HttpStatusException("Post not found", HttpStatus.NOT_FOUND));
-        return this.mapper.map(post.getComments(), new TypeToken<List<CommentDto>>(){}.getType());
+        return this.mapper.map(post.getComments(), CommentDto.class);
     }
 
     @Override
     public List<CommentDto> findAll() {
-        return this.mapper.map(commentRepository.findAll(), new TypeToken<List<CommentDto>>() {}.getType());
+        return this.mapper.map(commentRepository.findAll(), CommentDto.class);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsers(@RequestParam(name = "posts:gt", required = false) int size) {
+    public List<UserDto> getAllUsers(@RequestParam(name = "posts:gt", required = false, defaultValue = "0") int size) {
         if (size > 0) {
             return this.userService.findAllUsersHavingPostGreaterThan(size);
         }

@@ -5,10 +5,9 @@ import edu.miu.assignment.models.Post;
 import edu.miu.assignment.models.User;
 import edu.miu.assignment.models.dtos.PostCreateDto;
 import edu.miu.assignment.models.dtos.PostDto;
+import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.PostRepository;
 import edu.miu.assignment.repositories.UserRepository;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,16 +20,16 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final ModelMapper postMapper;
+    private final CustomMapper mapper;
 
     private List<PostDto> map(List<Post> posts) {
-        return posts.stream().map(post -> postMapper.map(post, PostDto.class)).collect(Collectors.toList());
+        return posts.stream().map(post -> mapper.map(post, PostDto.class)).collect(Collectors.toList());
     }
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, ModelMapper postMapper) {
+    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, CustomMapper mapper) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
-        this.postMapper = postMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -50,20 +49,20 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> findByTitle(String title) {
-        return this.postMapper.map(this.postRepository.findByTitle(title), new TypeToken<List<PostDto>>() {}.getType());
+        return this.mapper.map(this.postRepository.findByTitle(title), PostDto.class);
     }
 
     @Override
     public PostDto findById(long id) {
-        return this.postMapper.map(this.postRepository.findById(id).orElseThrow(() -> new HttpStatusException("Post not found", HttpStatus.NOT_FOUND)), PostDto.class);
+        return this.mapper.map(this.postRepository.findById(id).orElseThrow(() -> new HttpStatusException("Post not found", HttpStatus.NOT_FOUND)), PostDto.class);
     }
 
     @Override
     @Transactional
     public PostDto create(long userId, PostCreateDto dto) {
         User user = this.userRepository.findById(userId).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
-        user.getPosts().add(this.postMapper.map(dto, Post.class));
-        return this.postMapper.map(dto, PostDto.class);
+        user.getPosts().add(this.mapper.map(dto, Post.class));
+        return this.mapper.map(dto, PostDto.class);
     }
 
     @Override
@@ -78,6 +77,6 @@ public class PostServiceImpl implements PostService {
         existingPost.setContent(post.getContent());
         existingPost.setAuthor(post.getAuthor());
         this.postRepository.save(existingPost);
-        return this.postMapper.map(existingPost, PostDto.class);
+        return this.mapper.map(existingPost, PostDto.class);
     }
 }

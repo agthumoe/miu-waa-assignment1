@@ -1,6 +1,6 @@
 package edu.miu.assignment;
 
-import org.modelmapper.ModelMapper;
+import edu.miu.assignment.others.CustomMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ public class DemoApplication {
 	}
 
 	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
+	public CustomMapper customMapper() {
+		return new CustomMapper();
 	}
 }

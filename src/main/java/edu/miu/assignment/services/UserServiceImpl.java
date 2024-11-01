@@ -1,15 +1,16 @@
 package edu.miu.assignment.services;
 
+import edu.miu.assignment.exceptions.HttpStatusException;
 import edu.miu.assignment.models.User;
 import edu.miu.assignment.models.dtos.CommentDto;
 import edu.miu.assignment.models.dtos.PostDto;
 import edu.miu.assignment.models.dtos.UserCreateDto;
 import edu.miu.assignment.models.dtos.UserDto;
+import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.CommentRepository;
 import edu.miu.assignment.repositories.UserRepository;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +19,10 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-    private final ModelMapper mapper;
+    private final CustomMapper mapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CommentRepository commentRepository, ModelMapper mapper) {
+    public UserServiceImpl(UserRepository userRepository, CommentRepository commentRepository, CustomMapper mapper) {
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.mapper = mapper;
@@ -29,12 +30,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll() {
-        return this.mapper.map(this.userRepository.findAll(), new TypeToken<List<UserDto>>() {}.getType());
+        return this.mapper.map(this.userRepository.findAll(), UserDto.class);
     }
 
     @Override
     public UserDto findById(long id) {
-        return this.mapper.map(this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found")), UserDto.class);
+        return this.mapper.map(this.userRepository.findById(id).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND)), UserDto.class);
     }
 
     @Override
@@ -49,25 +50,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(long id, UserCreateDto post) {
-        User existingUser = this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("Not exist"));
+        User existingUser = this.userRepository.findById(id).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
         existingUser.setName(post.getName());
         return this.mapper.map(this.userRepository.save(existingUser), UserDto.class);
     }
 
     @Override
     public List<PostDto> findAllPostsByUserId(long id) {
-        User user = this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
-        return this.mapper.map(user.getPosts(), new TypeToken<List<PostDto>>() {}.getType());
+        User user = this.userRepository.findById(id).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
+        return this.mapper.map(user.getPosts(), PostDto.class);
     }
 
     @Override
     public List<UserDto> findAllUsersHavingPostGreaterThan(int size) {
-        return this.mapper.map(this.userRepository.findAllUsersHavingPostGreaterThan(size), new TypeToken<List<UserDto>>() {}.getType());
+        return this.mapper.map(this.userRepository.findAllUsersHavingPostGreaterThan(size), UserDto.class);
     }
 
     @Override
     public CommentDto getCommentsByUserIdAndPostId(long userId, long postId, long commentId) {
-        return this.mapper.map(this.commentRepository.findByUserIdPostIdAndCommentId(userId, postId, commentId).orElseThrow(() -> new RuntimeException("Not found")), CommentDto.class);
+        return this.mapper.map(this.commentRepository.findByUserIdPostIdAndCommentId(userId, postId, commentId).orElseThrow(() -> new HttpStatusException("Not Found", HttpStatus.NOT_FOUND)), CommentDto.class);
     }
 
 }
