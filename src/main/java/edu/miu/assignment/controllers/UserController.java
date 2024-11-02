@@ -1,5 +1,6 @@
 package edu.miu.assignment.controllers;
 
+import edu.miu.assignment.aspects.ExecutionTime;
 import edu.miu.assignment.models.dtos.*;
 import edu.miu.assignment.services.PostService;
 import edu.miu.assignment.services.UserService;
@@ -41,6 +42,7 @@ public class UserController {
     }
 
     @GetMapping("{id}")
+    @ExecutionTime
     public UserDto getUserById(@PathVariable long id) {
         return this.userService.findById(id);
     }
@@ -80,5 +82,13 @@ public class UserController {
     @GetMapping("{userId}/posts/{postId}/comments/{commentId}")
     public CommentDto getCommentByUserIdPostIdAndCommentId(@PathVariable long userId, @PathVariable long postId, @PathVariable long commentId) {
         return this.userService.getCommentsByUserIdAndPostId(userId, postId, commentId);
+    }
+
+    /**
+     * This endpoint is only for testing.
+     */
+    @GetMapping("exceptions")
+    public void throwExceptionMethod(){
+        throw new RuntimeException("This is exception message for testing purposes");
     }
 }
