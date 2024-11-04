@@ -4,10 +4,11 @@ import edu.miu.assignment.models.dtos.CommentDto;
 import edu.miu.assignment.models.dtos.PostDto;
 import edu.miu.assignment.models.dtos.UserCreateDto;
 import edu.miu.assignment.models.dtos.UserDto;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
     List<UserDto> findAll();
     UserDto findById(long id);
     UserDto save(UserCreateDto post);

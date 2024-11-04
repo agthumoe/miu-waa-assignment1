@@ -1,9 +1,13 @@
-INSERT INTO users (name) VALUES
-('Alice'),
-('Berry'),
-('Clark'),
-('Diana'),
-('Elliot');
+INSERT INTO users (name, username, password) VALUES
+('Alice', 'alice', 'password'),
+('Berry', 'berry', 'password'),
+('Clark', 'clark', 'password'),
+('Diana', 'diana', 'password'),
+('Elliot', 'elliot', 'password');
+
+INSERT INTO roles (name) VALUES ('ADMIN'),('USER');
+
+INSERT INTO user_roles (roles_id, user_id) VALUES (1, 1), (1, 2);
 
 INSERT INTO posts (user_id, author, content, title) VALUES
 (1, 'Alice', 'Exploring the basics of SQL and database management.', 'Intro to SQL'),

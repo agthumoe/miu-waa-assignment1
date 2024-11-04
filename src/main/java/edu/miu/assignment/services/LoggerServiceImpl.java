@@ -1,7 +1,7 @@
 package edu.miu.assignment.services;
 
 import edu.miu.assignment.models.Logger;
-import edu.miu.assignment.others.SecurityUtils;
+import edu.miu.assignment.securities.SecurityUtils;
 import edu.miu.assignment.repositories.LoggerRepository;
 import org.aspectj.lang.JoinPoint;
 import org.slf4j.LoggerFactory;

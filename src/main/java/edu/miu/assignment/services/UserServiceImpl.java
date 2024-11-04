@@ -12,6 +12,8 @@ import edu.miu.assignment.repositories.PostRepository;
 import edu.miu.assignment.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -87,5 +89,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<CommentDto> findAllCommentsByUserIdAndPostId(long userId, long postId) {
         return this.mapper.map(this.commentRepository.findAllCommentsByUserIdAndPostId(userId, postId), CommentDto.class);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository.findByUsernameIgnoreCase(username).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
     }
 }
