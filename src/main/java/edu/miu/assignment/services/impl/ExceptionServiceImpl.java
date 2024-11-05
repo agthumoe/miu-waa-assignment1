@@ -21,14 +21,14 @@ public class ExceptionServiceImpl implements ExceptionService {
     }
 
     @Override
-    public void log(JoinPoint joinPoint, Exception exception) {
+    public void log(JoinPoint joinPoint, Exception ex) {
         ExceptionEntity exceptionEntity = new ExceptionEntity();
         exceptionEntity.setOperation(joinPoint.getSignature().getName());
-        exceptionEntity.setExceptionType(exception.getClass().getName());
+        exceptionEntity.setExceptionType(ex.getClass().getName());
         exceptionEntity.setDate(LocalDate.now());
         exceptionEntity.setTime(LocalTime.now());
         exceptionEntity.setPrinciple(SecurityUtils.getPrinciple());
-        exceptionEntity.setMessage(exception.getMessage());
+        exceptionEntity.setMessage(ex.getCause() == null ? ex.getMessage() : ex.getCause().getMessage());
         this.exceptionRepository.save(exceptionEntity);
     }
 }

@@ -28,6 +28,7 @@ public class JwtService {
                 .subject(email)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + accessTokenExpirationTime))
+                .claim("type", "access-token")
                 .signWith(getSignInKey())
                 .compact();
     }
@@ -37,6 +38,7 @@ public class JwtService {
                 .subject(email)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + refreshTokenExpirationTime))
+                .claim("type", "refresh-token")
                 .signWith(getSignInKey())
                 .compact();
     }
@@ -50,13 +52,28 @@ public class JwtService {
                 .getSubject();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateAccessToken(String token) {
         try {
-            Jwts.parser()
+            String type = Jwts.parser()
                     .verifyWith(getSignInKey())
                     .build()
-                    .parseSignedClaims(token);
-            return true;
+                    .parseSignedClaims(token)
+                    .getPayload().get("type", String.class);
+            return "access-token".equals(type);
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
+            throw new HttpStatusException(e.getMessage(), HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public boolean validateRefreshToken(String token) {
+        try {
+            String type = Jwts.parser()
+                    .verifyWith(getSignInKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload().get("type", String.class);
+            return "refresh-token".equals(type);
         } catch (Exception e) {
             LOGGER.info(e.getMessage());
             throw new HttpStatusException(e.getMessage(), HttpStatus.FORBIDDEN);

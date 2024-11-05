@@ -1,5 +1,7 @@
 package edu.miu.assignment.securities;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.miu.assignment.exceptions.ApiError;
 import edu.miu.assignment.exceptions.HttpStatusException;
 import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.UserRepository;
@@ -23,6 +25,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 @RequiredArgsConstructor
 public class BeansProvider {
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -39,7 +42,7 @@ public class BeansProvider {
         return (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) -> {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType("application/json");
-            response.getWriter().write("{ \"code\": 401, \"message\": \"Unauthorized\" }");
+            response.getWriter().write(this.objectMapper.writeValueAsString(new ApiError(401, "Unauthorized")));
         };
     }
 

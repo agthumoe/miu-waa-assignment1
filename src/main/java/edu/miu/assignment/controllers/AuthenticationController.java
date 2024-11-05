@@ -1,7 +1,6 @@
 package edu.miu.assignment.controllers;
 
-import edu.miu.assignment.models.dtos.AuthRequest;
-import edu.miu.assignment.models.dtos.AuthResponse;
+import edu.miu.assignment.models.dtos.*;
 import edu.miu.assignment.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,15 +11,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/authenticate")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthService authService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 
-    @PostMapping
+    @PostMapping("/authenticate")
     public AuthResponse authenticate(@RequestBody AuthRequest authRequest) {
-        LOGGER.info("Authenticating user {}", authRequest.getUsername());
         return this.authService.authenticate(authRequest);
+    }
+
+    @PostMapping("/refresh")
+    public AuthResponse refreshToken(@RequestBody RefreshTokenRequest request) {
+        return this.authService.refresh(request);
+    }
+
+    @PostMapping("/register")
+    public UserDto register(@RequestBody RegistrationRequest request) {
+        return this.authService.register(request);
     }
 }

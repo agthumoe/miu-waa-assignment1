@@ -1,5 +1,7 @@
 package edu.miu.assignment.securities;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.miu.assignment.exceptions.ApiError;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,12 +24,14 @@ public class SecurityConfiguration {
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationEntryPoint authenticationEntryPoint;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((request) -> request
                         .requestMatchers("/api/v1/authenticate").permitAll()
+                        .requestMatchers("/api/v1/register").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated())
@@ -40,7 +44,7 @@ public class SecurityConfiguration {
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                             response.setContentType("application/json");
-                            response.getWriter().write("{\"code\": 403, \"message\": \"Access Denied\"}");
+                            response.getWriter().write(this.objectMapper.writeValueAsString(new ApiError(403, "Access denied")));
                         })
                         .authenticationEntryPoint(authenticationEntryPoint)
                 );
