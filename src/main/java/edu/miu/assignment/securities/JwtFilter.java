@@ -1,6 +1,5 @@
 package edu.miu.assignment.securities;
 
-import edu.miu.assignment.models.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,13 +19,15 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
+    private final JwtService jwtService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             final String token = authorizationHeader.substring(7);
-            if (SecurityUtils.validateToken(token) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                final String loginUsername = SecurityUtils.getUsername(token);
+            if (this.jwtService.validateToken(token) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                final String loginUsername = this.jwtService.getUsername(token);
                 UserDetails user = this.userDetailsService.loadUserByUsername(loginUsername);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities());

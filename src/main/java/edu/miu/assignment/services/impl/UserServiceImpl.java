@@ -1,37 +1,28 @@
-package edu.miu.assignment.services;
+package edu.miu.assignment.services.impl;
 
 import edu.miu.assignment.exceptions.HttpStatusException;
 import edu.miu.assignment.models.User;
-import edu.miu.assignment.models.dtos.CommentDto;
-import edu.miu.assignment.models.dtos.PostDto;
-import edu.miu.assignment.models.dtos.UserCreateDto;
-import edu.miu.assignment.models.dtos.UserDto;
+import edu.miu.assignment.models.dtos.*;
 import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.CommentRepository;
 import edu.miu.assignment.repositories.PostRepository;
 import edu.miu.assignment.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import edu.miu.assignment.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final CustomMapper mapper;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository, CustomMapper mapper) {
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
-        this.commentRepository = commentRepository;
-        this.mapper = mapper;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDto> findAll() {
@@ -45,7 +36,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(UserCreateDto post) {
-        return this.mapper.map(this.userRepository.save(this.mapper.map(post, User.class)), UserDto.class);
+        User user = this.mapper.map(post, User.class);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return this.mapper.map(this.userRepository.save(user), UserDto.class);
     }
 
     @Override
@@ -92,7 +85,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findByUsernameIgnoreCase(username).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
+    public void updatePassword(long userId, String newPassword) {
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        this.userRepository.save(user);
     }
 }

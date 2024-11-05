@@ -1,9 +1,9 @@
 INSERT INTO users (name, username, password) VALUES
-('Alice', 'alice', 'password'),
-('Berry', 'berry', 'password'),
-('Clark', 'clark', 'password'),
-('Diana', 'diana', 'password'),
-('Elliot', 'elliot', 'password');
+('Alice', 'alice', '$2a$10$kbAybEmK.q0H4AyDy/.PouLUK4owgIFIc.Wts0oAV4YSBrc41pAWq'),
+('Berry', 'berry', '$2a$10$kbAybEmK.q0H4AyDy/.PouLUK4owgIFIc.Wts0oAV4YSBrc41pAWq'),
+('Clark', 'clark', '$2a$10$kbAybEmK.q0H4AyDy/.PouLUK4owgIFIc.Wts0oAV4YSBrc41pAWq'),
+('Diana', 'diana', '$2a$10$kbAybEmK.q0H4AyDy/.PouLUK4owgIFIc.Wts0oAV4YSBrc41pAWq'),
+('Elliot', 'elliot', '$2a$10$kbAybEmK.q0H4AyDy/.PouLUK4owgIFIc.Wts0oAV4YSBrc41pAWq');
 
 INSERT INTO roles (name) VALUES ('ADMIN'),('USER');
 

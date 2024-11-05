@@ -1,4 +1,4 @@
-package edu.miu.assignment.services;
+package edu.miu.assignment.services.impl;
 
 import edu.miu.assignment.exceptions.HttpStatusException;
 import edu.miu.assignment.models.Post;
@@ -8,6 +8,7 @@ import edu.miu.assignment.models.dtos.PostDto;
 import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.PostRepository;
 import edu.miu.assignment.repositories.UserRepository;
+import edu.miu.assignment.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -1,14 +1,10 @@
 package edu.miu.assignment.services;
 
-import edu.miu.assignment.models.dtos.CommentDto;
-import edu.miu.assignment.models.dtos.PostDto;
-import edu.miu.assignment.models.dtos.UserCreateDto;
-import edu.miu.assignment.models.dtos.UserDto;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import edu.miu.assignment.models.dtos.*;
 
 import java.util.List;
 
-public interface UserService extends UserDetailsService {
+public interface UserService {
     List<UserDto> findAll();
     UserDto findById(long id);
     UserDto save(UserCreateDto post);
@@ -20,4 +16,5 @@ public interface UserService extends UserDetailsService {
     List<CommentDto> findAllCommentsByUserIdAndPostId(long userId, long postId);
     List<UserDto> findAllUsersThatMadePostsWithinGivenTitle(String title);
     PostDto findByUserIdAndPostId(long userId, long postId);
+    void updatePassword(long userId, String newPassword);
 }
