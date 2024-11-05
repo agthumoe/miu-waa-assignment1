@@ -13,6 +13,16 @@
 				{
 					"name": "Create Post",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbGljZSIsImlhdCI6MTczMDg0MTI3OSwiZXhwIjoxNzMwOTI3Njc5LCJ0eXBlIjoiYWNjZXNzLXRva2VuIn0.aDQaYpVM_-SG92pEKOyMffnLN7hJIbihC7QFIzzx7xyKst6jlAYLS_p-T6knk4vFClQNj0B8bmmBzLmq0FAQ3w",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -25,7 +35,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/users/:userId/posts",
+							"raw": "localhost:8080/api/v1/posts",
 							"host": [
 								"localhost"
 							],
@@ -33,15 +43,7 @@
 							"path": [
 								"api",
 								"v1",
-								"users",
-								":userId",
 								"posts"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": ""
-								}
 							]
 						}
 					},
@@ -182,11 +184,21 @@
 				{
 					"name": "Create New User",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbGljZSIsImlhdCI6MTczMDg0MTI3OSwiZXhwIjoxNzMwOTI3Njc5LCJ0eXBlIjoiYWNjZXNzLXRva2VuIn0.aDQaYpVM_-SG92pEKOyMffnLN7hJIbihC7QFIzzx7xyKst6jlAYLS_p-T6knk4vFClQNj0B8bmmBzLmq0FAQ3w",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"User A\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Gerry\",\r\n    \"username\": \"gerry\",\r\n    \"password\": \"password\",\r\n    \"roles\": [\"admin\", \"user\"]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -194,7 +206,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/users",
+							"raw": "localhost:8080/api/v1/admin/users",
 							"host": [
 								"localhost"
 							],
@@ -202,6 +214,7 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users"
 							]
 						}
@@ -214,7 +227,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/users/:id",
+							"raw": "localhost:8080/api/v1/admin/users/:id",
 							"host": [
 								"localhost"
 							],
@@ -222,6 +235,7 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users",
 								":id"
 							],
@@ -238,11 +252,21 @@
 				{
 					"name": "Update User",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbGljZSIsImlhdCI6MTczMDg0MTI3OSwiZXhwIjoxNzMwOTI3Njc5LCJ0eXBlIjoiYWNjZXNzLXRva2VuIn0.aDQaYpVM_-SG92pEKOyMffnLN7hJIbihC7QFIzzx7xyKst6jlAYLS_p-T6knk4vFClQNj0B8bmmBzLmq0FAQ3w",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"New name\"\r\n}",
+							"raw": "{\r\n    \"name\": \"New name\",\r\n    \"roles\": [\"admin\"]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -250,7 +274,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/users/:id",
+							"raw": "localhost:8080/api/v1/admin/users/:id",
 							"host": [
 								"localhost"
 							],
@@ -258,13 +282,14 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users",
 								":id"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "6"
 								}
 							]
 						}
@@ -310,10 +335,20 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbGljZSIsImlhdCI6MTczMDg0MTI3OSwiZXhwIjoxNzMwOTI3Njc5LCJ0eXBlIjoiYWNjZXNzLXRva2VuIn0.aDQaYpVM_-SG92pEKOyMffnLN7hJIbihC7QFIzzx7xyKst6jlAYLS_p-T6knk4vFClQNj0B8bmmBzLmq0FAQ3w",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/users",
+							"raw": "localhost:8080/api/v1/admin/users",
 							"host": [
 								"localhost"
 							],
@@ -321,6 +356,7 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users"
 							],
 							"query": [
@@ -345,7 +381,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/users/:id",
+							"raw": "localhost:8080/api/v1/admin/users/:id",
 							"host": [
 								"localhost"
 							],
@@ -353,6 +389,7 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users",
 								":id"
 							],
@@ -372,7 +409,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/users/:userId/posts",
+							"raw": "localhost:8080/api/v1/admin/users/:userId/posts",
 							"host": [
 								"localhost"
 							],
@@ -380,6 +417,7 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users",
 								":userId",
 								"posts"
@@ -400,7 +438,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/users/:userId/posts/:postId",
+							"raw": "localhost:8080/api/v1/admin/users/:userId/posts/:postId",
 							"host": [
 								"localhost"
 							],
@@ -408,6 +446,7 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users",
 								":userId",
 								"posts",
@@ -433,7 +472,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/users/:userId/posts/:postId/comments",
+							"raw": "localhost:8080/api/v1/admin/users/:userId/posts/:postId/comments",
 							"host": [
 								"localhost"
 							],
@@ -441,6 +480,7 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users",
 								":userId",
 								"posts",
@@ -467,7 +507,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/users/:userId/posts/:postId/comments/:commentId",
+							"raw": "localhost:8080/api/v1/admin/users/:userId/posts/:postId/comments/:commentId",
 							"host": [
 								"localhost"
 							],
@@ -475,6 +515,7 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users",
 								":userId",
 								"posts",
@@ -506,7 +547,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/users/exceptions",
+							"raw": "localhost:8080/api/v1/admin/users/exceptions",
 							"host": [
 								"localhost"
 							],
@@ -514,6 +555,7 @@
 							"path": [
 								"api",
 								"v1",
+								"admin",
 								"users",
 								"exceptions"
 							]
@@ -696,6 +738,138 @@
 									"key": "id",
 									"value": "1"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Aung Thu Moe\",\r\n    \"username\": \"agthumoe2\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"alice\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/authenticate",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbGljZSIsImlhdCI6MTczMDgzOTgxMCwiZXhwIjoxNzMwOTI2MjEwLCJ0eXBlIjoiYWNjZXNzLXRva2VuIn0.YAaIlE_rAgJ8lmAYhSA21uHf0PcyGVIFrDiljUw7XTjFcymR5l5latpvPS0pM4j0NIk-ocaEevlL3w7aDHfv8A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbGljZSIsImlhdCI6MTczMDgzOTgxMCwiZXhwIjoxNzMxNDQ0NjEwLCJ0eXBlIjoicmVmcmVzaC10b2tlbiJ9.VuPYOelLrtYylb6P9iiS0nWoz2VIhN4q8P6wdA3BeoutYiw_uyFi81lt26bD7Bpn7B337vOq8MrU5Go4yDkZGg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/refresh",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbGljZSIsImlhdCI6MTczMDgzOTMxNywiZXhwIjoxNzMwOTI1NzE3LCJ0eXBlIjoiYWNjZXNzLXRva2VuIn0.gImld41EakCo47SQMY0THjK7A8m7pR2dGAsOAOOJ__3Pc_Y0ZpMed2xMuaRT-FpZrHzzfwWs3-GoBN0QyMNhtQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/profile",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"profile"
 							]
 						}
 					},
