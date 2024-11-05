@@ -3,11 +3,13 @@ package edu.miu.assignment.securities;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.miu.assignment.exceptions.ApiError;
 import edu.miu.assignment.exceptions.HttpStatusException;
+import edu.miu.assignment.models.Role;
 import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.AbstractConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -61,6 +63,13 @@ public class BeansProvider {
 
     @Bean
     public CustomMapper customMapper() {
-        return new CustomMapper();
+        final CustomMapper mapper = new CustomMapper();
+        mapper.addConverter(new AbstractConverter<Role, String>() {
+            @Override
+            protected String convert(Role role) {
+                return role.getName();
+            }
+        });
+        return mapper;
     }
 }

@@ -1,12 +1,10 @@
 package edu.miu.assignment.securities;
 
-import edu.miu.assignment.exceptions.HttpStatusException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -62,7 +60,7 @@ public class JwtService {
             return "access-token".equals(type);
         } catch (Exception e) {
             LOGGER.info(e.getMessage());
-            throw new HttpStatusException(e.getMessage(), HttpStatus.FORBIDDEN);
+            return false;
         }
     }
 
@@ -76,7 +74,7 @@ public class JwtService {
             return "refresh-token".equals(type);
         } catch (Exception e) {
             LOGGER.info(e.getMessage());
-            throw new HttpStatusException(e.getMessage(), HttpStatus.FORBIDDEN);
+            return false;
         }
     }
 

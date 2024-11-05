@@ -8,6 +8,7 @@ import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.RoleRepository;
 import edu.miu.assignment.repositories.UserRepository;
 import edu.miu.assignment.securities.JwtService;
+import edu.miu.assignment.securities.SecurityUtils;
 import edu.miu.assignment.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -51,10 +52,29 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserDto register(RegistrationRequest registrationRequest) {
-        User user = this.mapper.map(registrationRequest, User.class);
+        final User user = this.mapper.map(registrationRequest, User.class);
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        Role userRole = this.roleRepository.findByNameIgnoreCase("user").orElseThrow(() -> new HttpStatusException("Role not found", HttpStatus.NOT_FOUND));
+        final Role userRole = this.roleRepository.findByNameIgnoreCase("user").orElseThrow(() -> new HttpStatusException("Role not found", HttpStatus.NOT_FOUND));
         user.getRoles().add(userRole);
         return this.mapper.map(this.userRepository.save(user), UserDto.class);
+    }
+
+    @Override
+    public UserDto getProfile() {
+        final User user = this.getCurrentUser();
+        return this.mapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public void updatePassword(long userId, String newPassword) {
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        this.userRepository.save(user);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        final String username = SecurityUtils.getPrinciple();
+        return this.userRepository.findByUsernameIgnoreCase(username).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
     }
 }

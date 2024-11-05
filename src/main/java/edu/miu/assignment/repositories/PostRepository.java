@@ -1,6 +1,5 @@
 package edu.miu.assignment.repositories;
 
-import edu.miu.assignment.models.Comment;
 import edu.miu.assignment.models.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

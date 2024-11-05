@@ -26,13 +26,15 @@ public class SecurityConfiguration {
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final ObjectMapper objectMapper;
 
+    private static final String[] whiteLists = {"/swagger-ui/**", "/v3/api-docs/**", "/error"};
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((request) -> request
+                        .requestMatchers(whiteLists).permitAll() // for open api documentation
                         .requestMatchers("/api/v1/authenticate").permitAll()
                         .requestMatchers("/api/v1/register").permitAll()
-                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

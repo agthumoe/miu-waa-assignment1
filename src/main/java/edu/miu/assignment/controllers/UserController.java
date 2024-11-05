@@ -1,26 +1,24 @@
 package edu.miu.assignment.controllers;
 
 import edu.miu.assignment.aspects.ExecutionTime;
-import edu.miu.assignment.models.dtos.*;
-import edu.miu.assignment.services.PostService;
+import edu.miu.assignment.models.dtos.CommentDto;
+import edu.miu.assignment.models.dtos.PostDto;
+import edu.miu.assignment.models.dtos.UserCreateDto;
+import edu.miu.assignment.models.dtos.UserDto;
 import edu.miu.assignment.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/admin/users")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     private final UserService userService;
-    private final PostService postService;
-
-    @Autowired
-    public UserController(UserService userService, PostService postService) {
-        this.userService = userService;
-        this.postService = postService;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -61,12 +59,6 @@ public class UserController {
     @GetMapping("{userId}/posts")
     public List<PostDto> findPostsByUserId(@PathVariable long userId) {
         return this.userService.findAllPostsByUserId(userId);
-    }
-
-    @PostMapping("{userId}/posts")
-    @ResponseStatus(HttpStatus.CREATED)
-    public PostDto createPost(@PathVariable long userId, @RequestBody PostCreateDto post) {
-        return this.postService.create(userId, post);
     }
 
     @GetMapping("{userId}/posts/{postId}")

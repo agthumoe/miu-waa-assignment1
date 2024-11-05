@@ -1,19 +1,26 @@
 package edu.miu.assignment.services.impl;
 
 import edu.miu.assignment.exceptions.HttpStatusException;
+import edu.miu.assignment.models.Role;
 import edu.miu.assignment.models.User;
-import edu.miu.assignment.models.dtos.*;
+import edu.miu.assignment.models.dtos.CommentDto;
+import edu.miu.assignment.models.dtos.PostDto;
+import edu.miu.assignment.models.dtos.UserCreateDto;
+import edu.miu.assignment.models.dtos.UserDto;
 import edu.miu.assignment.others.CustomMapper;
 import edu.miu.assignment.repositories.CommentRepository;
 import edu.miu.assignment.repositories.PostRepository;
+import edu.miu.assignment.repositories.RoleRepository;
 import edu.miu.assignment.repositories.UserRepository;
 import edu.miu.assignment.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final CommentRepository commentRepository;
     private final CustomMapper mapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public List<UserDto> findAll() {
@@ -35,9 +43,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto save(UserCreateDto post) {
-        User user = this.mapper.map(post, User.class);
+    public UserDto save(UserCreateDto dto) {
+        User user = this.mapper.map(dto, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(this.mapRoles(dto.getRoles()));
         return this.mapper.map(this.userRepository.save(user), UserDto.class);
     }
 
@@ -47,9 +56,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(long id, UserCreateDto post) {
+    @Transactional
+    public UserDto update(long id, UserCreateDto dto) {
         User existingUser = this.userRepository.findById(id).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
-        existingUser.setName(post.getName());
+        existingUser.setName(dto.getName());
+        existingUser.setRoles(this.mapRoles(dto.getRoles()));
         return this.mapper.map(this.userRepository.save(existingUser), UserDto.class);
     }
 
@@ -84,10 +95,9 @@ public class UserServiceImpl implements UserService {
         return this.mapper.map(this.commentRepository.findAllCommentsByUserIdAndPostId(userId, postId), CommentDto.class);
     }
 
-    @Override
-    public void updatePassword(long userId, String newPassword) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new HttpStatusException("User not found", HttpStatus.NOT_FOUND));
-        user.setPassword(passwordEncoder.encode(newPassword));
-        this.userRepository.save(user);
+    private List<Role> mapRoles(List<String> roles) {
+        return roles.stream()
+                .map(role -> this.roleRepository.findByNameIgnoreCase(role).orElseThrow(() -> new HttpStatusException("Role: " + role + " not found", HttpStatus.NOT_FOUND)))
+                .collect(Collectors.toList());
     }
 }

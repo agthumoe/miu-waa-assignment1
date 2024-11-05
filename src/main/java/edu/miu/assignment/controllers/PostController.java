@@ -1,12 +1,15 @@
 package edu.miu.assignment.controllers;
 
+import edu.miu.assignment.models.User;
 import edu.miu.assignment.models.dtos.CommentCreateDto;
 import edu.miu.assignment.models.dtos.CommentDto;
 import edu.miu.assignment.models.dtos.PostCreateDto;
 import edu.miu.assignment.models.dtos.PostDto;
+import edu.miu.assignment.services.AuthService;
 import edu.miu.assignment.services.CommentService;
 import edu.miu.assignment.services.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +17,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/posts")
+@RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class PostController {
     private final PostService postService;
     private final CommentService commentService;
-
-    @Autowired
-    public PostController(PostService postService, CommentService commentService) {
-        this.postService = postService;
-        this.commentService = commentService;
-    }
+    private final AuthService authService;
 
     @GetMapping
     public List<PostDto> getAllPosts(
@@ -37,6 +37,13 @@ public class PostController {
             return postService.findByTitle(title);
         }
         return postService.findAll();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PostDto createPost(@RequestBody PostCreateDto post) {
+        User user = this.authService.getCurrentUser();
+        return this.postService.create(user.getId(), post);
     }
 
     @GetMapping("{id}")

@@ -1,6 +1,9 @@
 package edu.miu.assignment.services;
 
-import edu.miu.assignment.models.dtos.*;
+import edu.miu.assignment.models.dtos.CommentDto;
+import edu.miu.assignment.models.dtos.PostDto;
+import edu.miu.assignment.models.dtos.UserCreateDto;
+import edu.miu.assignment.models.dtos.UserDto;
 
 import java.util.List;
 
@@ -16,5 +19,4 @@ public interface UserService {
     List<CommentDto> findAllCommentsByUserIdAndPostId(long userId, long postId);
     List<UserDto> findAllUsersThatMadePostsWithinGivenTitle(String title);
     PostDto findByUserIdAndPostId(long userId, long postId);
-    void updatePassword(long userId, String newPassword);
 }

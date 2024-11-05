@@ -3,6 +3,7 @@ package edu.miu.assignment.controllers;
 import edu.miu.assignment.models.dtos.CommentCreateDto;
 import edu.miu.assignment.models.dtos.CommentDto;
 import edu.miu.assignment.services.CommentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/comments")
+@SecurityRequirement(name = "bearerAuth")
 public class CommentController {
     private final CommentService commentService;
 

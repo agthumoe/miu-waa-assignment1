@@ -5,11 +5,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -22,7 +20,7 @@ public class User implements UserDetails {
 
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, updatable = false)
     private String username;
     @JsonIgnore
     private String password;
