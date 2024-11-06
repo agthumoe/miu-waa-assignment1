@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @ControllerAdvice(annotations = RestController.class, basePackages = "edu.miu.assignment.controllers")
@@ -19,22 +20,26 @@ public class HttpStatusHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<?> handleIntegrityViolation(DataIntegrityViolationException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError(400, ex.getMostSpecificCause().getMessage()));
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleIntegrityViolation(DataIntegrityViolationException ex) {
+        return new ApiError(400, ex.getMostSpecificCause().getMessage());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<?> handleBadCredentials(BadCredentialsException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiError(401, ex.getMessage()));
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiError handleBadCredentials(BadCredentialsException ex) {
+        return new ApiError(401, ex.getMessage());
     }
 
     @ExceptionHandler(InternalAuthenticationServiceException.class)
-    public ResponseEntity<?> handleUsernameNotFound(InternalAuthenticationServiceException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiError(404, ex.getMessage()));
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleUsernameNotFound(InternalAuthenticationServiceException ex) {
+        return new ApiError(404, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiError(500, ex.getMessage()));
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiError handleException(Exception ex) {
+        return new ApiError(500, ex.getMessage());
     }
 }
