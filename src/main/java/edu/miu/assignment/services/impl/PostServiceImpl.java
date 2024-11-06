@@ -26,6 +26,7 @@ public class PostServiceImpl implements PostService {
     private List<PostDto> map(List<Post> posts) {
         return posts.stream().map(post -> mapper.map(post, PostDto.class)).collect(Collectors.toList());
     }
+
     @Autowired
     public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, CustomMapper mapper) {
         this.postRepository = postRepository;

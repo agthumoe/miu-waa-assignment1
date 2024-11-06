@@ -21,13 +21,16 @@ public class LoggerAspect {
     }
 
     @Pointcut("execution( * edu.miu.assignment.controllers.*.*(..))")
-    public void controllerAnyMethodPointcut() {}
+    public void controllerAnyMethodPointcut() {
+    }
 
     @Pointcut("execution(* edu.miu.assignment.services.*.*(..))")
-    public void serviceAnyMethodPointCut() {}
+    public void serviceAnyMethodPointCut() {
+    }
 
     @Pointcut("@annotation(ExecutionTime)")
-    public void executionTimePointCut() {}
+    public void executionTimePointCut() {
+    }
 
     @After("controllerAnyMethodPointcut()")
     public void logAfter(JoinPoint joinPoint) {

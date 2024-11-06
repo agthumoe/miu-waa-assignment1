@@ -7,6 +7,8 @@ import edu.miu.assignment.models.dtos.UserCreateDto;
 import edu.miu.assignment.models.dtos.UserDto;
 import edu.miu.assignment.services.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody UserCreateDto user) {
+    public UserDto createUser(@RequestBody @Valid UserCreateDto user) {
         return this.userService.save(user);
     }
 
@@ -41,38 +43,38 @@ public class UserController {
 
     @GetMapping("{id}")
     @ExecutionTime
-    public UserDto getUserById(@PathVariable long id) {
+    public UserDto getUserById(@PathVariable @Min(1) long id) {
         return this.userService.findById(id);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(@PathVariable long id) {
+    public void deleteUserById(@PathVariable @Min(1) long id) {
         this.userService.delete(id);
     }
 
     @PutMapping("{id}")
-    public UserDto updateUser(@PathVariable long id, @RequestBody UserCreateDto user) {
+    public UserDto updateUser(@PathVariable @Min(1) long id, @Valid @RequestBody UserCreateDto user) {
         return this.userService.update(id, user);
     }
 
     @GetMapping("{userId}/posts")
-    public List<PostDto> findPostsByUserId(@PathVariable long userId) {
+    public List<PostDto> findPostsByUserId(@PathVariable @Min(1) long userId) {
         return this.userService.findAllPostsByUserId(userId);
     }
 
     @GetMapping("{userId}/posts/{postId}")
-    public PostDto findByUserIdAndPostId(@PathVariable long userId, @PathVariable long postId) {
+    public PostDto findByUserIdAndPostId(@PathVariable @Min(1) long userId, @PathVariable @Min(1) long postId) {
         return this.userService.findByUserIdAndPostId(userId, postId);
     }
 
     @GetMapping("{userId}/posts/{postId}/comments")
-    public List<CommentDto> findCommentsByUserIdPostId(@PathVariable long userId, @PathVariable long postId) {
+    public List<CommentDto> findCommentsByUserIdPostId(@PathVariable @Min(1) long userId, @PathVariable @Min(1) long postId) {
         return this.userService.findAllCommentsByUserIdAndPostId(userId, postId);
     }
 
     @GetMapping("{userId}/posts/{postId}/comments/{commentId}")
-    public CommentDto getCommentByUserIdPostIdAndCommentId(@PathVariable long userId, @PathVariable long postId, @PathVariable long commentId) {
+    public CommentDto getCommentByUserIdPostIdAndCommentId(@PathVariable @Min(1) long userId, @PathVariable @Min(1) long postId, @PathVariable @Min(1) long commentId) {
         return this.userService.getCommentsByUserIdAndPostId(userId, postId, commentId);
     }
 
@@ -80,7 +82,7 @@ public class UserController {
      * This endpoint is only for testing.
      */
     @GetMapping("exceptions")
-    public void throwExceptionMethod(){
+    public void throwExceptionMethod() {
         throw new RuntimeException("This is exception message for testing purposes");
     }
 }

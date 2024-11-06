@@ -9,8 +9,11 @@ import edu.miu.assignment.services.AuthService;
 import edu.miu.assignment.services.CommentService;
 import edu.miu.assignment.services.PostService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,35 +44,35 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PostDto createPost(@RequestBody PostCreateDto post) {
+    public PostDto createPost(@RequestBody @Validated PostCreateDto post) {
         User user = this.authService.getCurrentUser();
         return this.postService.create(user.getId(), post);
     }
 
     @GetMapping("{id}")
-    public PostDto getPostById(@PathVariable long id) {
-         return this.postService.findById(id);
+    public PostDto getPostById(@PathVariable @Min(1) long id) {
+        return this.postService.findById(id);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePostById(@PathVariable long id) {
+    public void deletePostById(@PathVariable @Min(1) long id) {
         this.postService.delete(id);
     }
 
     @PutMapping("{id}")
-    public PostDto updatePost(@PathVariable long id, @RequestBody PostCreateDto post) {
+    public PostDto updatePost(@PathVariable @Min(1) long id, @RequestBody @Valid PostCreateDto post) {
         return this.postService.update(id, post);
     }
 
     @PostMapping("{postId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto createPost(@PathVariable long postId, @RequestBody CommentCreateDto dto) {
+    public CommentDto createPost(@PathVariable @Min(1) long postId, @RequestBody @Valid CommentCreateDto dto) {
         return this.commentService.save(postId, dto);
     }
 
     @GetMapping("{postId}/comments")
-    public List<CommentDto> getPostComments(@PathVariable long postId) {
+    public List<CommentDto> getPostComments(@PathVariable @Min(1) long postId) {
         return this.commentService.findByPostId(postId);
     }
 }

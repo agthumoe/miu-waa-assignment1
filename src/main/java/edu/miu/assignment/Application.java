@@ -9,18 +9,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(
-		title = "WAA Assignment API",
-		description = "Assignment for MIU WAA course by Aung Thu Moe",
-		version = "0.0.1"
+        title = "WAA Assignment API",
+        description = "Assignment for MIU WAA course by Aung Thu Moe",
+        version = "0.0.1"
 ))
 @SecurityScheme(
-		name = "bearerAuth",
-		type = SecuritySchemeType.HTTP,
-		bearerFormat = "JWT",
-		scheme = "bearer"
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
 )
 public class Application {
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 }

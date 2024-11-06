@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where size(u.posts) > :size")
     List<User> findAllUsersHavingPostGreaterThan(int size);
+
     Optional<User> findByUsernameIgnoreCase(String username);
 
     @Query("select distinct u from User u join u.posts p where p.title = :title")
