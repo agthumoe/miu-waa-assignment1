@@ -7,7 +7,12 @@ INSERT INTO users (name, username, password) VALUES
 
 INSERT INTO roles (name) VALUES ('ADMIN'),('USER');
 
-INSERT INTO user_roles (roles_id, user_id) VALUES (1, 1), (1, 2);
+INSERT INTO user_roles (user_id, roles_id) VALUES
+(1, 1), (1, 2),
+(2, 2),
+(3, 1), (3, 2),
+(4, 1),
+(5, 2);
 
 INSERT INTO posts (user_id, author, content, title) VALUES
 (1, 'Alice', 'Exploring the basics of SQL and database management.', 'Intro to SQL'),

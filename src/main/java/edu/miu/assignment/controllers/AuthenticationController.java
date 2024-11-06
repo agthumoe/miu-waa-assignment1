@@ -29,6 +29,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/profile")
+    @SecurityRequirement(name = "bearerAuth")
     public UserDto getProfile() {
         return this.authService.getProfile();
     }

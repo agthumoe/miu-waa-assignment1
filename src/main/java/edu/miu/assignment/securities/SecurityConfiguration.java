@@ -2,16 +2,22 @@ package edu.miu.assignment.securities;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.miu.assignment.exceptions.ApiError;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,8 +28,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfiguration {
     private final JwtFilter jwtFilter;
-    private final AuthenticationProvider authenticationProvider;
-    private final AuthenticationEntryPoint authenticationEntryPoint;
     private final ObjectMapper objectMapper;
 
     private static final String[] whiteLists = {"/swagger-ui/**", "/v3/api-docs/**", "/error"};
@@ -36,9 +40,10 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/authenticate").permitAll()
                         .requestMatchers("/api/v1/register").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/api/v1/posts/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/v1/comments/**").hasAnyAuthority("USER", "ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -48,9 +53,28 @@ public class SecurityConfiguration {
                             response.setContentType("application/json");
                             response.getWriter().write(this.objectMapper.writeValueAsString(new ApiError(403, "Access denied")));
                         })
-                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .authenticationEntryPoint(authenticationEntryPoint())
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) -> {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType("application/json");
+            response.getWriter().write(this.objectMapper.writeValueAsString(new ApiError(401, "Unauthorized")));
+        };
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
