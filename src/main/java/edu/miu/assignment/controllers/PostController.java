@@ -50,29 +50,29 @@ public class PostController {
     }
 
     @GetMapping("{id}")
-    public PostDto getPostById(@PathVariable @Min(1) long id) {
+    public PostDto getPostById(@PathVariable("id") @Min(1) long id) {
         return this.postService.findById(id);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePostById(@PathVariable @Min(1) long id) {
+    public void deletePostById(@PathVariable("id") @Min(1) long id) {
         this.postService.delete(id);
     }
 
     @PutMapping("{id}")
-    public PostDto updatePost(@PathVariable @Min(1) long id, @RequestBody @Valid PostCreateDto post) {
+    public PostDto updatePost(@PathVariable("id") @Min(1) long id, @RequestBody @Valid PostCreateDto post) {
         return this.postService.update(id, post);
     }
 
     @PostMapping("{postId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto createPost(@PathVariable @Min(1) long postId, @RequestBody @Valid CommentCreateDto dto) {
+    public CommentDto createPost(@PathVariable("postId") @Min(1) long postId, @RequestBody @Valid CommentCreateDto dto) {
         return this.commentService.save(postId, dto);
     }
 
     @GetMapping("{postId}/comments")
-    public List<CommentDto> getPostComments(@PathVariable @Min(1) long postId) {
+    public List<CommentDto> getPostComments(@PathVariable("postId") @Min(1) long postId) {
         return this.commentService.findByPostId(postId);
     }
 }

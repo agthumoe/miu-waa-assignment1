@@ -27,19 +27,19 @@ public class CommentController {
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDto getCommentById(@PathVariable @Min(1) long id) {
+    public CommentDto getCommentById(@PathVariable("id") @Min(1) long id) {
         return this.commentService.findById(id);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable @Min(1) long id) {
+    public void deleteById(@PathVariable("id") @Min(1) long id) {
         this.commentService.delete(id);
     }
 
     @PutMapping("{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public CommentDto update(@PathVariable @Min(1) long id, @RequestBody @Valid CommentCreateDto dto) {
+    public CommentDto update(@PathVariable("id") @Min(1) long id, @RequestBody @Valid CommentCreateDto dto) {
         return this.commentService.update(id, dto);
     }
 }

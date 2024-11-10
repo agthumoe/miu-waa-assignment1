@@ -43,38 +43,38 @@ public class UserController {
 
     @GetMapping("{id}")
     @ExecutionTime
-    public UserDto getUserById(@PathVariable @Min(1) long id) {
+    public UserDto getUserById(@PathVariable("id") @Min(1) long id) {
         return this.userService.findById(id);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(@PathVariable @Min(1) long id) {
+    public void deleteUserById(@PathVariable("id") @Min(1) long id) {
         this.userService.delete(id);
     }
 
     @PutMapping("{id}")
-    public UserDto updateUser(@PathVariable @Min(1) long id, @Valid @RequestBody UserCreateDto user) {
+    public UserDto updateUser(@PathVariable("id") @Min(1) long id, @Valid @RequestBody UserCreateDto user) {
         return this.userService.update(id, user);
     }
 
     @GetMapping("{userId}/posts")
-    public List<PostDto> findPostsByUserId(@PathVariable @Min(1) long userId) {
+    public List<PostDto> findPostsByUserId(@PathVariable("userId") @Min(1) long userId) {
         return this.userService.findAllPostsByUserId(userId);
     }
 
     @GetMapping("{userId}/posts/{postId}")
-    public PostDto findByUserIdAndPostId(@PathVariable @Min(1) long userId, @PathVariable @Min(1) long postId) {
+    public PostDto findByUserIdAndPostId(@PathVariable("userId") @Min(1) long userId, @PathVariable @Min(1) long postId) {
         return this.userService.findByUserIdAndPostId(userId, postId);
     }
 
     @GetMapping("{userId}/posts/{postId}/comments")
-    public List<CommentDto> findCommentsByUserIdPostId(@PathVariable @Min(1) long userId, @PathVariable @Min(1) long postId) {
+    public List<CommentDto> findCommentsByUserIdPostId(@PathVariable("userId") @Min(1) long userId, @PathVariable @Min(1) long postId) {
         return this.userService.findAllCommentsByUserIdAndPostId(userId, postId);
     }
 
     @GetMapping("{userId}/posts/{postId}/comments/{commentId}")
-    public CommentDto getCommentByUserIdPostIdAndCommentId(@PathVariable @Min(1) long userId, @PathVariable @Min(1) long postId, @PathVariable @Min(1) long commentId) {
+    public CommentDto getCommentByUserIdPostIdAndCommentId(@PathVariable("userId") @Min(1) long userId, @PathVariable("postId") @Min(1) long postId, @PathVariable("commentId") @Min(1) long commentId) {
         return this.userService.getCommentsByUserIdAndPostId(userId, postId, commentId);
     }
 
