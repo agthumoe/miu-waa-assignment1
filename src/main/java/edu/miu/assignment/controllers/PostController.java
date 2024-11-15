@@ -71,8 +71,8 @@ public class PostController {
         return this.commentService.save(postId, dto);
     }
 
-    @GetMapping("{postId}/comments")
-    public List<CommentDto> getPostComments(@PathVariable("postId") @Min(1) long postId) {
-        return this.commentService.findByPostId(postId);
+    @GetMapping("/{id}/comments")
+    public List<CommentDto> getPostComments(@PathVariable("id") long id) {
+        return this.commentService.findByPostId(id);
     }
 }

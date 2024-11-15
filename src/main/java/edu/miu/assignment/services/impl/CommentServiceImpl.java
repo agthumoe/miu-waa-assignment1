@@ -30,6 +30,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CommentDto> findByPostId(long postId) {
         Post post = this.postRepository.findById(postId).orElseThrow(() -> new HttpStatusException("Post not found", HttpStatus.NOT_FOUND));
         return this.mapper.map(post.getComments(), CommentDto.class);
